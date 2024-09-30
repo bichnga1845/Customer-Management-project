@@ -1,4 +1,6 @@
-from PyQt6.QtWidgets import QMessageBox
+import sys
+
+from PyQt6.QtWidgets import QMessageBox, QApplication
 
 from MainWindow import Ui_MainWindow
 
@@ -8,55 +10,89 @@ class MainWindowEx(Ui_MainWindow):
         pass
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
+        self.MainWindow=MainWindow
+
         self.add_button.clicked.connect(self.add_customer)
         self.edit_button.clicked.connect(self.edit_customer)
         self.delete_button.clicked.connect(self.delete_customer)
         self.reset_button.clicked.connect(self.reset_fields)
         self.customer_list.itemClicked.connect(self.load_selected_customer)
         self.load_customers()
-        self.MainWindow=MainWindow
-    def show(self):
-        self.MainWindow.show()
+
+
 
         # Hien thong tin khach hang
     def load_customers(self):
         self.customer_list.clear()
-        for id, details in customers.items():
-            self.customer_list.addItem(f"ID: {id} | Name: {details['name']} | Email: {details['email']}")
+        for cid, details in customers.items():
+            self.customer_list.addItem(f"ID: {cid} | Name: {details['name']} | Email: {details['email']}")
 
             # ADD CUSTOMER
 
     def add_customer(self):
-        id = self.id_input.text().strip()
-        name = self.name_input.text().strip()
-        email = self.email_input.text().strip()
+        cid = self.id_input.text()
+        name = self.name_input.text()
+        email = self.email_input.text()
 
-        if id in customers:
+        if cid in customers:
             QMessageBox.critical(self, "Lỗi", "Mã khách hàng đã tồn tại!")
             return
 
-        if not id or not name or not email:
+        if not cid or not name or not email:
             QMessageBox.critical(self, "Lỗi", "Vui lòng nhập đầy đủ thông tin!")
             return
 
-        customers[id] = {'name': name, 'email': email}
+        customers[cid] = {'name': name, 'email': email}
         QMessageBox.information(self, "Thành công", "Khách hàng đã được thêm!")
         self.load_customers()
 
         # Xóa khách hàng
-        def delete_customer(self):
-            id = self.id_input.text()
+    def delete_customer(self):
+        cid = self.id_input.text()
 
-            if id not in customers:
-                QMessageBox.critical(self, "Lỗi", "Không tìm thấy mã khách hàng!")
-                return
+        if cid not in customers:
+            QMessageBox.critical(self, "Lỗi", "Không tìm thấy mã khách hàng!")
+            return
 
-            del customers[id]
-            QMessageBox.information(self, "Thành công", "Khách hàng đã được xóa!")
-            self.load_customers()
+        del customers[cid]
+        QMessageBox.information(self, "Thành công", "Khách hàng đã được xóa!")
+        self.load_customers()
 
         # Xóa các trường nhập liệu
-        def reset_fields(self):
-            self.id_input.clear()
-            self.name_input.clear()
-            self.email_input.clear()
+    def reset_fields(self):
+        self.id_input.clear()
+        self.name_input.clear()
+        self.email_input.clear()
+
+            # EDIT CUSTOMER
+    def edit_customer(self):
+        cid = self.id_input.text()
+
+        if cid not in customers:
+            QMessageBox.critical(self, "Lỗi", "Không tìm thấy mã khách hàng!")
+            return
+
+        name = self.name_input.text()
+        email = self.email_input.text()
+
+        if not name or not email:
+            QMessageBox.critical(self, "Lỗi", "Vui lòng nhập đầy đủ thông tin!")
+            return
+
+        customers[cid]['name'] = name
+        customers[cid]['email'] = email
+        QMessageBox.information(self, "Thành công", "Thông tin khách hàng đã được cập nhật!")
+        self.load_customers()
+
+        # UPDATE IN4 CUSTOMER
+    def load_selected_customer(self):
+        selected = self.customer_list.currentItem().text()
+        cid = selected.split('|')[0].split(':')[1]
+
+        customer = customers[cid]
+        self.id_input.setText(cid)
+        self.name_input.setText(customer['name'])
+        self.email_input.setText(customer['email'])
+
+    def show(self):
+        self.MainWindow.show()
