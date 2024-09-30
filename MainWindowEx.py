@@ -1,6 +1,6 @@
-import sys
 
-from PyQt6.QtWidgets import QMessageBox, QApplication
+
+from PyQt6.QtWidgets import QMessageBox
 
 from MainWindow import Ui_MainWindow
 
@@ -35,15 +35,15 @@ class MainWindowEx(Ui_MainWindow):
         email = self.email_input.text()
 
         if cid in customers:
-            QMessageBox.critical(self, "Lỗi", "Mã khách hàng đã tồn tại!")
+            QMessageBox.critical(self.MainWindow, "Lỗi", "Mã khách hàng đã tồn tại!")
             return
 
         if not cid or not name or not email:
-            QMessageBox.critical(self, "Lỗi", "Vui lòng nhập đầy đủ thông tin!")
+            QMessageBox.critical(self.MainWindow, "Lỗi", "Vui lòng nhập đầy đủ thông tin!")
             return
 
         customers[cid] = {'name': name, 'email': email}
-        QMessageBox.information(self, "Thành công", "Khách hàng đã được thêm!")
+        QMessageBox.information(self.MainWindow, "Thành công", "Khách hàng đã được thêm!")
         self.load_customers()
 
         # Xóa khách hàng
@@ -51,11 +51,11 @@ class MainWindowEx(Ui_MainWindow):
         cid = self.id_input.text()
 
         if cid not in customers:
-            QMessageBox.critical(self, "Lỗi", "Không tìm thấy mã khách hàng!")
+            QMessageBox.critical(self.MainWindow, "Lỗi", "Không tìm thấy mã khách hàng!")
             return
 
         del customers[cid]
-        QMessageBox.information(self, "Thành công", "Khách hàng đã được xóa!")
+        QMessageBox.information(self.MainWindow, "Thành công", "Khách hàng đã được xóa!")
         self.load_customers()
 
         # Xóa các trường nhập liệu
@@ -69,19 +69,19 @@ class MainWindowEx(Ui_MainWindow):
         cid = self.id_input.text()
 
         if cid not in customers:
-            QMessageBox.critical(self, "Lỗi", "Không tìm thấy mã khách hàng!")
+            QMessageBox.critical(self.MainWindow, "Lỗi", "Không tìm thấy mã khách hàng!")
             return
 
         name = self.name_input.text()
         email = self.email_input.text()
 
         if not name or not email:
-            QMessageBox.critical(self, "Lỗi", "Vui lòng nhập đầy đủ thông tin!")
+            QMessageBox.critical(self.MainWindow, "Lỗi", "Vui lòng nhập đầy đủ thông tin!")
             return
 
         customers[cid]['name'] = name
         customers[cid]['email'] = email
-        QMessageBox.information(self, "Thành công", "Thông tin khách hàng đã được cập nhật!")
+        QMessageBox.information(self.MainWindow, "Thành công", "Thông tin khách hàng đã được cập nhật!")
         self.load_customers()
 
         # UPDATE IN4 CUSTOMER
