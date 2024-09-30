@@ -42,3 +42,21 @@ class MainWindowEx(Ui_MainWindow):
         customers[id] = {'name': name, 'email': email}
         QMessageBox.information(self, "Thành công", "Khách hàng đã được thêm!")
         self.load_customers()
+
+        # Xóa khách hàng
+        def delete_customer(self):
+            id = self.id_input.text()
+
+            if id not in customers:
+                QMessageBox.critical(self, "Lỗi", "Không tìm thấy mã khách hàng!")
+                return
+
+            del customers[id]
+            QMessageBox.information(self, "Thành công", "Khách hàng đã được xóa!")
+            self.load_customers()
+
+        # Xóa các trường nhập liệu
+        def reset_fields(self):
+            self.id_input.clear()
+            self.name_input.clear()
+            self.email_input.clear()
